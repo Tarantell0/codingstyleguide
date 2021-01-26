@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load conventions_tags %}
+
+{% block title %}{{ block.super }} · Unvoted{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Recent unvoted guidelines" >
+		<meta name="keywords" content="unvoted, guidelines, styles, rules, codingstyleguide, no, ranking, top">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">Recent Unvoted Guidelines</span>
+    <hr/>
+</div>
+{% if conventions %} 
+    {% for convention, reputation, votes in conventions %}
+    <div class="std-wrapper">
+        {% base_standards convention reputation votes %}
+    </div>
+    {% endfor %}
+{% else %}
+<div class="sort-nav-std">
+    <span class="date">There are no unvoted guidelines yet.</span>
+</div>
+{% endif %}
+
+{% endblock %}

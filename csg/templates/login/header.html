@@ -1,0 +1,9 @@
+<div class="topbar-right-wrapper">
+    {% if user %}
+       <a class="topbar-menu main-user-link topbar-right-menu" href="{% url 'lg_info' user.id %}">{{ user.username|truncatechars:14 }} ({{ reputation }})</a>  
+       <a class="topbar-menu topbar-right-menu" href="{% url 'lg_logout' %}">sign out</a>
+    {% else %}
+       <a class="topbar-menu topbar-right-menu" href="{% url 'lg_login' %}?next={{path}}">login</a> 
+       <a class="topbar-menu topbar-right-menu" href="{% url 'lg_signup' %}">sign up</a>
+    {% endif %}
+</div>

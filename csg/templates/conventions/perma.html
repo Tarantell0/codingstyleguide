@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown_deux_tags %}
+{% load conventions_tags %}
+
+{% block title %}{{ convention.title }} · {{ convention.tag }} · {{ block.super }}{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="{{ convention.tag }} - {{ convention.title }}. {{ convention.description }}" >
+		<meta name="keywords" content="{{ convention.tag }}, {{ convention.title }}, CodingStyleGuide, coding, style, guide, code, readable, programming">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std" style="margin-top: 0!important; margin-bottom:10px;">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- info-baner -->
+	<ins class="adsbygoogle"
+			 style="display:block"
+			 data-ad-client="ca-pub-8429386429878399"
+			 data-ad-slot="4095705460"
+			 data-ad-format="auto"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+
+<div class="sort-nav-std super-top-title">
+    <h1 class="big-std-title">{{ convention.title }}</h1>
+</div>
+
+{% if duplicate %}
+    <div class="sort-nav-std super-top-title duplicate-banner">
+        <span class="normal-text-banner">
+					<b>Note:</b> This guideline has been tagged as duplicate and it might have a similar style here:
+					<br>
+					<ul>
+					{% for d, flag in duplicate %}
+							<form id="flag_duplicate_std{{ d.duplicated.id }}" action="{% url 'flag' %}" method="POST">{% csrf_token %}
+									<input type="hidden" name="convention_id" value="{{ convention.id }}" />
+									<input type="hidden" name="is_convention" value="false" />
+									<input type="hidden" name="is_duplicate" value="true" />
+									<input type="hidden" name="duplicate_convention_id" value="{{ d.duplicated.id }}" />
+									<a href="#" class="main-link duplicatebox-flag
+									{% if flag %}
+											is_flag" title="Remove this flag"
+									{% else %}
+											title="Report this guideline as not duplicate"
+									{% endif %}
+									onclick="document.forms['flag_duplicate_std{{ d.duplicated.id }}'].submit();">mark as not duplicate</a>
+							</form>
+							
+							<li><a class="main-link" href="{% url 'cv_perma' d.duplicated.id %}">{{ d.duplicated.title }}</a></li>
+								 <ul><li> 
+									<span>
+
+									Flagged as duplicate by
+									{% for l in d.login.all %}
+											<a class="main-link" href="{% url 'lg_info' l.id %}">{{ l.username }}</a>,
+									{% endfor %}
+									on {{ d.creation_date }}
+									</span>
+								 </li></ul>
+
+					{% endfor %}
+					</ul>
+        </span>
+    </div>
+    <div class="sort-nav-std super-top-title space"></div>
+{% endif %}
+
+<div class="std-wrapper">
+    <div class="standards">
+        <div class="column-standard left-standard">
+            <div class="vote-std super-vote-std">
+                <div class="votes">
+                    <form method="POST" action={% url 'cv_toggle_vote' %}>
+                        {% vote_list convention total_votes %}
+                    {% csrf_token %}
+                    </form>
+                </div>
+                {% discussion_count convention %}
+                {% same_conventions convention %}
+            </div>
+        </div>
+        <div class="column-standard right-standard">
+            <div class="standard-top">
+                <div class="std-top-wrapper">
+                    <div class="std-top-content">
+                        <div class="favorite">
+                            <div class="fav-buttons">
+                                <form method="POST" action={% url 'cv_toggle_favorite' %}>{% csrf_token %}
+                                    {% favorite_list convention %}
+                                </form>
+                            </div>
+                        </div>                        
+                        <a class="main-link lang-link" href="{% url 'cv_tagged' convention.tag.id %}">
+                            {{convention.tag.name}}
+                        </a>
+                        <span class="date">posted by</span>
+                        {% if convention.login.is_active %}
+                            <a class="main-link lang-link" href="{% url 'lg_info' convention.login.id %}">
+                                {{ convention.login.username }} ({{ reputation }})
+                            </a>
+                        {% else %}
+                            <span class="inactive-user">
+                                community 
+                            </span>
+                        {% endif %}
+                        <span class="date">on {{convention.creation_date|date:"M j 'y, H:i"}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="standard-middle">
+                {% if convention.description %}
+                    <div class="content-description super-description">
+                        {{ convention.description|markdown }}
+                    </div>
+
+                {% else %}
+                    <div class="content-description super-description super-no-description">
+                        <span class="date">This guideline has no description. Feel free to add one by editing.</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="standard-pre-bottom">
+                <div class="std-pre-bottom-wrapper">
+
+                    <a id="share" class="main-link some-link"  title="Share a link to this guideline">share</a>
+       
+                    {% if user.is_authenticated %}
+                        <span class="date"> | </span>
+                        
+                        <a class="main-link some-link"  href="{% url 'cv_edit' convention.id %}" title="Improve this guideline">edit</a>
+
+                        <span class="date"> | </span>
+                        
+                        <form id="flag_std" action="{% url 'flag' %}" method="POST">{% csrf_token %}
+                            <input type="hidden" name="convention_id" value="{{ convention.id }}" />
+                            <input type="hidden" name="is_convention" value="true" />
+                            <input type="hidden" name="is_duplicate" value="false" />
+                            <input type="hidden" name="duplicate_convention_id" value="None" />
+                            <a href="#"
+                            {% if is_flag %}
+                                class="main-link some-link is_flag" title="Remove this flag"
+                            {% else %}
+                                class="main-link some-link" title="Report this guideline"
+                            {% endif %}
+                            onclick="document.forms['flag_std'].submit();">flag</a>
+                        </form>
+                        
+                        <span class="date"> | </span>
+                        
+                        <a id="duplicate" 
+                        {% if is_duplicate %}
+                            class="main-link some-link is_flag"  title="You tagged this guideline as duplicate of the guideline(s) with id: {{duplicated_id}}">
+                        {% else %}
+                            class="main-link some-link"  title="Mark this guideline as duplicate">
+                        {% endif %}
+                        duplicate</a>
+                         
+                        <span class="date"> | </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div id="sharebox" style="display:None;">
+                <span class="date">share a link to this guideline</span>
+                <input type="text" onClick="this.select()" style="width:250px;" value="http://codingstyleguide.com/s/{{ convention.id }}"/>
+                
+                <div>
+
+                <a href="http://twitter.com/share?text={{convention.tag.name}}:%20{{convention.title}}" onclick="window.open(this.href, 'codingstyleguide','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" target="_blank"><img alt="Twitter" src="{% static 'images/share_twitter.png' %}"></a>
+                
+                <a class="main-link some-link"  href="http://www.facebook.com/sharer/sharer.php?u=http://codingstyleguide.com/s/{{ convention.id }}&amp;t={{convention.title}}" onclick="window.open(this.href, 'codingstyleguide','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" target="_blank"><img alt="Facebook" src="{% static 'images/share_facebook.png' %}"></a>
+
+                <a href="https://plus.google.com/share?url=http://codingstyleguide.com/s/{{ convention.id }}" onclick="window.open(this.href, 'codingstyleguide','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" target="_blank"><img alt="Google+" src="{% static 'images/share_google.png' %}"></a>
+
+                </div>
+            
+            </div>
+            <div id="duplicatebox" style="display:None;">
+                <span class="date"><b>Type the id of the duplicated guideline</b>
+                <br>Ex: http://codingstyleguide.com/style/<b>id</b>/...</span>
+                <input id="duplicate-input" name="{{convention.id}}" type="text" style="width:250px;" placeholder="For example: 10" />
+                <span id="guideline-duplicated-founded"></span>
+                <div class="tag-nav-content">
+                    <a id="cancel-duplicate" class="main-link">cancel</a>
+
+                    <input id="unique-duplicate" class="post-button small-button" type="submit" value="Ok"/>
+                    <!--
+                    <form method="POST" action="{% url 'duplicate' %} ">{% csrf_token %}
+                        <input type="hidden" name="convention_id" value="" />
+                        <input id="unique-duplicate" class="post-button small-button" type="submit" value="Ok"/>
+                    </form>
+                    -->
+                </div>
+            </div>
+ 
+
+            <div class="standard-bottom" >
+                <div class="std-bottom-wrapper super-std-bottom-wrapper">
+                    <div class="std-bottom-left" style="padding-right:50px">
+                        <a class="main-link lang-link" href="{% url 'cv_tagged' convention.tag.id %}">
+                            {{convention.tag.name}}
+                        </a>
+                    </div>
+                        {% edited_convention convention %}
+                    <div class="std-bottom-right">
+                        <span class="date">{{ convention.creation_date|timesince }} ago</span>
+												{% if convention.login.is_active %}
+														<a class="main-link" href="{% url 'lg_info' convention.login.id %}">
+																{{ convention.login.username }} ({{ reputation }})
+														</a>
+												{% else %}
+														<span class="inactive-user">
+																community 
+														<span>
+												{% endif %}
+                    </div>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+<!-- comment zone -->
+<div class="sort-nav-std std-comment">
+		{% for comment,vote_comment,total_comment_vote in comments %}
+				<div class="comment-box" id="delete-{{comment.id}}">
+						<div class="comment-increment">
+								<form method="POST" action={% url 'cv_toggle_vote' %}>{% csrf_token %}
+										{% if user.is_authenticated %}
+												<div class="up-buttons">
+														<input type="hidden" name="comment_id" value="{{ comment.id }}">
+														{% csrf_token %}
+
+														{% if vote_comment %}
+																<img class="vote-comment-up selected" src="{% static "images/up_on.png" %}" title="undo up"/>
+														{% else %}
+																<img class="vote-comment-up" src="{% static "images/up_off.png" %}" title="vote up"/>
+														{% endif %}
+												</div>
+												<input type="hidden" name="total-votes" value="{{ total_comment_vote }}">
+										{% endif %}
+										<div class="total-vote"><span class="vote-comment-count vote-small">{{total_comment_vote}}</span></div>
+								</form>
+						</div>
+
+						<div class="comment">{{ comment.comment|markdown }}</div>
+
+						<div class="comment-bottom"> 
+								<div class="comment-buttons comment-delete-buttons"> <!-- css not found -->
+										{% ifequal comment.login login %}
+												<form method="POST" action="{% url 'cv_toggle_delete_comment' %} ">
+														<input type="hidden" name="next" value="{{ request.get_full_path }}">
+														<input type="hidden" name="comment_id" value="{{ comment.id }}">
+														<input class="post-button small-button" type="submit" value="Delete" name="delete">
+														{% csrf_token %}
+												</form>
+												<a class="link-nolink" name="edit,{{comment.id}}">edit</a>
+										{% endifequal %} 
+								</div>
+								<div class="autor-comment-info">
+										<span class="date">
+												{{ comment.creation_date|timesince }} 
+										</span> 
+										<a class="main-link link-comment" href="{% url 'lg_info' comment.login.id %}">
+												{{ comment.login.username }}
+										</a>
+								</div>
+						</div>
+						<hr/>
+				</div>
+				{% ifequal comment.login login %}
+				<div class="comment-box" id="update-{{comment.id}}" style="display: none;">
+						<div class="comment-buttons-update">
+								<form method="POST" action="{% url 'cv_toggle_update_comment' %}">{% csrf_token %}
+										<textarea class="comment-textarea comment-update-textarea" name="comment_text">{{ comment.comment }}</textarea>
+										<input type="hidden" name="comment_id" value="{{ comment.id }}">
+										<div class="comment-buttons">
+												<input class="post-button small-button" type="submit" value="Update" name="update"/>
+												<a class="link-nolink-cancel" name="update,{{comment.id}}">cancel</a>
+										</div>
+								</form>
+						</div>
+						<hr/>
+				</div>
+				{% endifequal %}
+		{% endfor %}
+		{% if user.is_authenticated %}
+				<div class="comment-convention">
+						<form method="POST" action="{% url 'cv_toggle_comment' %}">
+						<input type="hidden" name="next" value="{{ request.get_full_path }}">
+						<div class="left-comment">
+								<textarea class="comment-textarea" placeholder="Improve this guideline with a comment. You can use Markdown." name="comment"></textarea>
+						</div>
+						<div class="right-comment">
+								<input type="hidden" name="convention_id" value="{{ convention.id }}" />
+								<!-- postcomment-button not found -->
+								<input class="post-button postcomment-button"  type="submit" name="submit" value="Add Comment" />
+						</div>
+						{% csrf_token %}
+						</form>
+			</div>
+		{% endif %}
+</div>
+{% endblock %}

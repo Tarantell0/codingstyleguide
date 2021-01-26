@@ -1,0 +1,7 @@
+{% if same_conventions.count == 2 %}
+<div name="{{convention.0.id}}" class="similar-circle" title="There is 1 guideline with similar title and programming language">+{{total}}</div>
+<h2 class="vote-std-title similar-title">similar</h2>
+{% elif same_conventions.count > 2 %}
+<div name="{{convention.0.id}}" class="similar-circle" title="There are {{total}} guidelines with similar title and programming language">+{{total}}</div>
+<h2 class="vote-std-title similar-title">similars</h2>
+{% endif %}

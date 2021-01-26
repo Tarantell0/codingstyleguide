@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ block.super }} · Login{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Enhance your coding: conventions, rules, techniques," >
+		<meta name="keywords" content="Enhance, coding, conventions, rules, techniques, signup, up, be, member, team, codingstyleguide">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+<div id="signup-mark">
+    <div class="signup-text">
+        <span class="signup-title">Log in with one click</span>
+    </div>
+    <div class="social-auth-menu">
+        <div class="log-auth log-github">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "github" %}">
+                <img src="{% static "images/github.png" %}" alt="Login with your Github account">
+                </a>
+            </div>
+        </div>
+        <div class="log-auth log-twitter">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "twitter" %}">
+                <img src="{% static "images/twitter.png" %}" alt="Login with your Twitter account">
+                </a>
+            </div>
+        </div>
+        <div class="log-auth log-facebook">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "facebook" %}">
+                <img id="facebook-logo" src="{% static "images/facebook.png" %}" alt="Login with your Facebook account">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="signup-manually">
+        <span>or log in with your account</span> 
+    </div>
+
+    <div id="login-form">
+        <hr/>
+        <form method="POST">
+            <table class="logs">
+                <tr>
+                    <td><span class="logtitle">username</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="text" name="username" value="{{username}}"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_username }}</span></td>
+                </tr><tr>
+                    <td><span class="logtitle">password</span></td>
+                </tr><tr>
+                    <td><input  class="logfields" type="password" name="password"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_message }}</span></td>
+                </tr><tr>
+                    <td>
+                        <!-- postcomment-button not in css-->
+                        <input class="post-button postcomment-button" type="submit" value="Login">
+                    </td>
+                </tr><tr>
+                    <td><br/></td>
+                </tr><tr>
+                    <td><a class="main-link" href="{% url 'password_reset' %}">Forgot your password?</a> <span class="logtitle">or</span> <a class="main-link" href="{% url 'lg_signup' %}">Sign up</a></td>
+                </tr>
+            </table>
+            {% csrf_token %}
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
+

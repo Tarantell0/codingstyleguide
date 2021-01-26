@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load conventions_tags %}
+
+{% block title %}{{language}} Guidelines · {{ block.super }} {% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="{{language}} programming guidelines, conventions, rules, techniques, good practices" >
+		<meta name="keywords" content="{{language}}, programming, guidelines, conventions, rules, techniques, good practices, CodingStyleGuide">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std" style="margin-top: 0!important; margin-bottom:10px;">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- info-baner -->
+	<ins class="adsbygoogle"
+			 style="display:block"
+			 data-ad-client="ca-pub-8429386429878399"
+			 data-ad-slot="4095705460"
+			 data-ad-format="auto"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+<div class="sort-nav-std">
+    <div class="tag-nav-menu">
+        <span class="site-title">{{language}}</span>
+        <div class="tag-nav-content">
+            {% for tab,sort_key in tabs %}
+                {% if sort_key == sort %}
+                    <div class="tag-nav-button tag-nav-select">
+                {% else %}
+                    <div class="tag-nav-button">
+                {% endif %}
+                        <a href="?sort={{sort_key}}&amp;page=1" class="main-link">{{tab}}</a>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% if conventions|length == 0 %}
+    <div class="sort-nav-std">
+        <span class="date">There are no entries yet.</span>
+    </div>
+{% else %}
+
+    <div class="std-wrapper">
+    {% for convention, reputation, votes in conventions %}
+            <div class="standards">
+                {% base_standards convention reputation votes show_discussion_count=True similars=False display_date=False %}
+            </div>
+    {% endfor %}
+    </div>
+
+<div class="sort-nav-std">
+    <span>share this language:</span><span class="share-language"> http://codingstyleguide.com/lang/{{conventions.0.0.tag.slug}}</span>
+    <div class="pagination">
+        <span class="step-links">
+            {% if pagin.has_previous %}
+                <a class="main-link" href="?sort={{sort}}&amp;page={{ pagin.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="date">
+                Page {{ pagin.number }} of {{ pagin.paginator.num_pages }}
+            </span>
+
+            {% if pagin.has_next %}
+                <a class="main-link" href="?sort={{sort}}&amp;page={{ pagin.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load conventions_tags %}
+
+{% block title %}diff · {{edit.convention.tag.name}} · {{edit.convention.title}}{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Diff: {{edit.convention.title}} in {{edit.convention.tag.name}}" >
+		<meta name="keywords" content="Diff, compare, changes, {{edit.convention.tag.name}}, {{edit.convention.title}}, CodingStyleGuide, coding, style, guide, code">
+{% endblock %}
+
+{% block content %}
+
+<div class="sort-nav-std super-top-title">
+    {#<h1 class="big-std-title">{{ edit.convention.title|truncatechars:80 }}</h1>#}
+    <h1 class="big-std-title">{{ latest_title|truncatechars:80 }}</h1>
+</div>
+<div class="std-wrapper">
+    {% for convention,descriptions,titles,index in subversion %}
+    <div class="standards">
+        <div class="column-standard left-standard">
+            <div class="vote-std">
+                <h2 class="vote-std-count">{{ index }}</h2>
+                <h2 class="vote-std-title">revision</h2>
+            </div>
+        </div>
+        <div class="column-standard right-standard">
+            <div class="standard-middle">
+                {% if titles %}
+                <div class="std-title">
+                     <span class="title-link"><span><b>Title</b></span>
+                        {{titles|escape|safe}}
+                    </span>
+                </div>
+                {% endif %}
+                {% if descriptions %}
+                <div class="content-description"><span><b>Guideline</b></span>
+                        {{ descriptions|escape|safe}}
+                </div>
+                {% endif %}
+            </div>
+            <div class="standard-bottom">
+                <div class="std-bottom-wrapper">
+                    <div class="std-bottom-left">
+                        <a class="main-link lang-link" href="">
+                            {{convention.tag.name}}
+                        </a>
+                    </div>
+                    <div class="std-bottom-right">
+                        <span class="date">{{ convention.creation_date|date:"M j 'y, H:i" }}</span>
+                            {% if convention.login.is_active %}
+                                <a class="main-link" href="{% url 'lg_info' convention.login.id %}">
+                                    {{ convention.login.username }}
+                                </a>
+                            {% else %}
+                                <span class="inactive_user">community<span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="standards">
+        <div class="column-standard left-standard">
+            <div class="vote-std">
+                <h2 class="vote-std-count">1</h2>
+                <h2 class="vote-std-title">original</h2>
+            </div>
+        </div>
+        <div class="column-standard right-standard">
+            <div class="standard-middle">
+                <div class="std-title">
+                    <a class="title-link" href="{% url 'cv_perma' edit.convention.id %}">
+                        {{ edit.convention.title|truncatechars:80 }}
+                    </a>
+                </div>
+                {% if edit.convention.description %}
+                    <div class="content-description show-description">
+                        {{ edit.convention.description|markdown }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="standard-bottom">
+                <div class="std-bottom-wrapper">
+                    <div class="std-bottom-left">
+                        <a class="main-link lang-link" href="{% url 'cv_tagged' edit.convention.tag.id %}">
+                            {{edit.convention.tag.name}}
+                        </a>
+                    </div>
+                    <div class="std-bottom-right">
+                        <span class="date">{{ edit.convention.creation_date|date:"M j 'y, H:i" }}</span>
+                            {% if edit.convention.login.is_active %}
+                                <a class="main-link" href="{% url 'lg_info' edit.convention.login.id %}">
+                                    {{ edit.convention.login.username }}
+                                </a>
+                            {% else %}
+                                <span class="inactive-user">community<span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

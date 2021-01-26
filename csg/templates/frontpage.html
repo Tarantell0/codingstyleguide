@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+{% load conventions_tags %}
+
+{% block title %}
+    {{ block.super }} · Increasing the readability of your code
+{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Coding Style Guide is a reference site for passionate and dedicated developers. Enhance your coding: conventions, rules, techniques. Learn how it works." >
+		<meta name="keywords" content="CodingStyleGuide, programming, hacking, reference site, developer, coding, style, guide, code, conventions, rules, techniques, readable">
+{% endblock %}
+
+
+{% block banner %}
+    <div class="info-banner">
+        <div class="text-banner">
+            <span class="haupt-text-banner">
+                <b>Coding Style Guide is a reference site for<br/>
+                   passionate and dedicated developers.</b>
+            </span>
+            <span class="normal-text-banner">
+                <br/>Enhance your coding: conventions, rules, techniques.
+                <br/>Learn how it works <a class="main-link" href="{% url 'about' %}">» here.</a>
+                <br/>
+            </span>
+            <a class="main-link" href="{% url 'lg_signup' %}">
+                » Sign up to get access to all features!
+            </a>
+        </div>
+        <div class="img-banner">
+            <!-- share box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-share.png" %}" alt="Share knowledge">
+                <h3>Share knowledge.</h3>
+                <span>contribute with your experience to the community</span>
+            </div>
+            <!-- improve box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-increment.png" %}" alt="Increment the best">
+                <h3>Increment the best.</h3>
+                <span>decide which code is top and which is not by voting</span>
+            </div>
+            <!-- increment box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-improve.png" %}" alt="Improve style">
+                <h3>Improve style.</h3>
+                <span>find perfect standads for your code anytime</span>
+            </div>
+            <!--
+            <img src="{% static "images/banner-info.png" %}" />
+            -->
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block welcomebanner %}
+<div id="welcome" class="info-banner welcome-banner">
+    <div class="text-banner">
+        <span class="haupt-text-banner">
+            <b>Welcome to Coding Style Guide!</b>
+        </span>
+        <span class="normal-text-banner">
+            <br/>Thanks for signing up! We are happy to have you here!
+            <br/>Get started with posting your own, tagging your
+            <br/>favorites and commenting on guidelines.
+            <br/>
+        </span>
+        <a class="main-link" href="{% url 'about' %}">
+            » Check out here how to increase your reputation
+        </a>
+    </div>
+    <div class="img-banner">
+            <!-- share box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-share.png" %}" alt="Share knowledge">
+                <h3>Share knowledge.</h3>
+                <span>contribute with your experience to the community</span>
+            </div>
+            <!-- improve box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-increment.png" %}" alt="Increment the best">
+                <h3>Increment the best.</h3>
+                <span>decide which code is top and which is not by voting</span>
+            </div>
+            <!-- increment box-->
+            <div class="single-banner">
+                <img src="{% static "images/banner-improve.png" %}" alt="Improve style">
+                <h3>Improve style.</h3>
+                <span>find perfect standads for your code anytime</span>
+            </div>
+            <!--
+            <img src="{% static "images/banner-info.png" %}" />
+            -->
+    </div>
+    <form id="welcome-form" action="{% url 'rm_welcome' %}" method="POST">{% csrf_token %}
+        <div id="hide-welcome" onclick="document.forms['welcome-form'].submit();">
+            <img id="welcome-img" src="{% static "images/close-welcome.png" %}" alt="close">
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="sort-nav-std"><span class="site-title">Most Recent Guidelines</span><hr/></div>
+
+{% if conventions %}
+    <div class="std-wrapper">
+    {% for convention, reputation, votes in conventions %}
+            <div class="standards">
+                {% base_standards convention reputation votes show_discussion_count=True similars=False display_date=False %}
+            </div>
+    {% endfor %}
+    </div>
+
+{% endif %}
+
+{% endblock %}

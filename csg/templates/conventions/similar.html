@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% load conventions_tags %}
+
+{% block title %}Similars · {{conventions.0.0.tag.name}} · {{conventions.0.0.title}}{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">Similar Guidelines of <b><i>{{conventions.0.0.title|truncatechars:78}}</i></b> in <b>{{ conventions.0.0.tag.name }}</b></span>
+    <hr/>
+</div>
+{% if not no_similars_msg %} 
+    <div class="std-wrapper">
+    {% for convention, reputation, votes in conventions %}
+        <div class="standards">
+        {% base_standards convention reputation votes similars=False %}
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+<div class="sort-nav-std">
+    <span class="date">{{no_similars_msg}}</span>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load conventions_tags %}
+
+{% block title %}{{ block.super }} · {{ title_site }}{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="{{ title_site }} in CodingStyleGuide" >
+		<meta name="keywords" content="{{ title_site }}, CodingStyleGuide, top, hot, coding, style, guide, code, readable, programming">
+{% endblock %}
+
+{% block content %}
+
+<div class="sort-nav-std" style="margin-top: 0!important; margin-bottom:10px;">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- info-baner -->
+	<ins class="adsbygoogle"
+			 style="display:block"
+			 data-ad-client="ca-pub-8429386429878399"
+			 data-ad-slot="4095705460"
+			 data-ad-format="auto"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+
+<div class="sort-nav-std">
+    <span class="site-title">{{title}}</span>
+    <hr/>
+</div>
+{% if conventions %}
+    <div class="std-wrapper">
+    {% for convention, reputation, votes in conventions %}
+            <div class="standards">
+                {% base_standards convention reputation votes show_discussion_count=True similars=False %}
+            </div>
+    {% endfor %}
+    </div>
+{% else %}
+<div class="sort-nav-std">
+    <span class="date">There are no entries yet.</span>
+</div>
+{% endif %}
+{% endblock %}

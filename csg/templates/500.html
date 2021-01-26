@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} · Page Unavailable{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">Page unavailable</span>
+    <hr/>
+</div>
+<div class="sort-nav-std">
+    <span>Sorry, but the requested page is unavailable due to a server hiccup.</span>
+    <br/>
+    <span>I have been notified, so check back later.</span>
+    <br/>
+    <a href="{% url 'frontpage' %}" class="main-link">Coding Style Guide</a>
+</div>
+{% endblock %}

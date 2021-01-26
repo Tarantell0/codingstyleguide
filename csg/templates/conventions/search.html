@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load conventions_tags %}
+
+{% block title %}Guidelines containing {{text}} · {{ block.super }}{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Find programming Guidelines, styles, good practice and more that you are looking for! Searching for Guidelines containing {{text}}" >
+		<meta name="keywords" content="CodingStyleGuide, search, find, look, at, good, practice, more, coding, style, guide, {{text}}, code, readable, programming">
+{% endblock %}
+
+{% block content %}
+
+<div class="sort-nav-std">
+    <span class="site-title">Your Search: <b>{{ text }}</b></span>
+    <span class="date"> {{ conventions.count }}
+    {% if conventions.count == 1 %}
+         result
+    {% else %}
+         results
+    {% endif %}
+    found</span>
+    <hr/>
+</div>
+{% if conventions.count > 0 %}
+    <div class="std-wrapper">
+    {% for convention in conventions %}
+        <div class="standards">
+            <div class="column-standard right-standard search-standard">
+                <div class="standard-middle">
+                    <div class="std-title">
+                        <a class="title-link" href="{% url 'cv_perma' convention.object.id %}">
+                            {{ convention.object.title }}
+                        </a>
+                    </div>
+                    {% if convention.description %}
+                        <div class="content-description show-description search-list">
+                            {{ convention.description|truncatechars:140|markdown|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="standard-bottom">
+                    <div class="std-bottom-wrapper">
+                        <div class="std-bottom-left">
+                            <a class="main-link lang-link" href="{% url 'cv_tagged' convention.object.tag.id %}">
+                                {{convention.object.tag.name}}
+                            </a>
+                        </div>
+                        <div class="std-bottom-right">
+                            <span class="date">{{ convention.creation_date|date:"M j 'y, H:i" }}</span>
+                                {% if convention.object.login.is_active %}
+                                    <a class="main-link" href="{% url 'lg_info' convention.object.login.id %}">
+                                        {{ convention.object.login.username }} {{ reputation }}
+                                    </a>
+                                {% else %}
+                                    <span class="inactive-user">
+                                        community
+                                    <span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+<div class="sort-nav-std">
+    <span class="date">No matches found. Please try different key words.</span>
+</div>
+{% endif %}
+
+{% endblock %}

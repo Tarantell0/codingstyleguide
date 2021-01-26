@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+<div id="signup-mark">
+    <div class="signup-text">
+        <span class="signup-title">forgot your password?</span>
+    </div>
+    <br/>
+
+    <form action="" method="POST">
+    <table class="logs">
+        <hr/>
+        <tr>
+            <td>
+                <span class="logtitle">enter your email</span>
+            </td>
+        </tr><tr>
+            <td>
+                <input class="logfields" type="text" name="username" value={{username}}>
+            </td>
+        </tr><tr>
+            <td>
+                <span class="errormessage">{{ error_message }}</span>
+            </td>
+        </tr><tr>
+            <td>
+                <input class="post-button postcomment-button" type="submit" value="submit">
+            </td>
+        </tr>
+    </table>
+    {% csrf_token %}
+    </form>
+
+</div>
+    {% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown_deux_tags %}
+
+{% block title %}{{ block.super }} · Welcome{% endblock %}
+{% block meta_seo %} 
+<meta name="description" content="Welcome and thank you for helping Coding Style Guide be Coding Style Guide!" >
+<meta name="keywords" content="CodingStyleGuide, welcome, thanks, code, readable, programming">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std" style="width:100% !important;">
+    <div id="signup-mark">
+        <div class="signup-text">
+            <span class="signup-title" style="">Thanks for joining us, we are very happy to have you at Coding Style Guide!</span>
+        </div>
+        <div style="text-align:justify;">
+            {{text|markdown|escape|safe}}
+        </div>
+        <p>
+            <a class="main-title" href="{% url 'cv_post' %}">Add a guideline</a> or <a class="main-title" href="{% url 'frontpage' %}">search for existing guidelines.</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

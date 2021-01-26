@@ -1,0 +1,9 @@
+{% load static %}
+<!--<td> {{ favorite }} <input type="submit" name="favorite" value="favorite"> -->
+<input type="hidden" name="convention_id" value={{ convention.id }}>
+{% csrf_token %}
+{% if favorite %}
+    <img class="fav-selected" src="{% static "images/fav_on.png" %}" title="Make it favororite" alt="Mark this style guide as favororite">
+{% else %}
+    <img class="fav" src="{% static "images/fav_off.png" %}" title="Remove from favororites" alt="Remove this style guide from favororites">
+{% endif %}

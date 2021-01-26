@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Edit · {{convention.tag}} · {{convention.title}}{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Editing: {{convention.title}} in {{convention.tag}}" >
+		<meta name="keywords" content="{{convention.tag}}, CodingStyleGuide, edit, modify, change, improve, coding, style, guide, code, readable">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">You Are Editing: <b>{{convention.title}}</b> in <b>{{convention.tag}}</b></span><hr/>
+</div>
+<div class="std-wrapper std-custom-wrapper">
+    <div class="column-standard form-standard">
+        <form action="" method="POST">{% csrf_token %}{{ form.media}}
+            {% if is_title_editable %}
+            <table>
+                <tr>
+                    <td><span class="change-site-title">Title </span></td>
+                    <td> {{ form.title }} </td>
+                </tr>
+            </table>
+            {% endif %}
+            <table class="table-form" >
+                <tr>
+                    <span class="errormessage">{{ form.title.errors|striptags }}</span>
+                    <span class="errormessage">{{ error_min_char }}</span>
+                </tr>
+                <tr>
+                    {{ form.rules_for_naming }}
+                </tr>
+                <tr>
+                    <span class="date">Please use 
+                        <a href="http://daringfireball.net/projects/markdown/" class="main-link" target='_blank'>
+                        markdown</a> for formatting.
+                    </span>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div style="float:right;">
+                            <a class="main-link" href="{% url 'cv_perma' convention.id %}">cancel</a>
+                            <input type="submit" class="post-button" value="Save Changes">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

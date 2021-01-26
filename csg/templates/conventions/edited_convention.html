@@ -1,0 +1,9 @@
+{% if is_edited %}
+<a class="main-link lang-link" href="{% url 'cv_revision' edit.convention.id %}">edited {{ edit.creation_date|date:"M j 'y, H:i" }}</a>
+{% ifnotequal convention.login.username edit.login.username %}
+<a class="main-link lang-link" href="{% url 'lg_info' edit.login.id %}">
+    {{ edit.login.username }} {{ edit_reputation }}
+</a>
+{% endifnotequal %}
+{% endif %}
+

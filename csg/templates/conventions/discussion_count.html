@@ -1,0 +1,5 @@
+{% load static %}
+{% if total > 0 %}
+<div class="discuss-circle" title="This guideline has {{total}} discussion">{{total}} <img class="discussion-logo" src="{% static "images/discussion.png" %}" alt="Discussion logo"></div>
+<!--<h2 class="vote-std-title discuss-title">discuss</h2>-->
+{% endif %}

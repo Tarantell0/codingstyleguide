@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} · Edit · Your profile{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <form action="" method="POST">
+
+        <div id="signup-mark">
+            <div class="signup-text">
+                <span class="signup-title">Personal Information</span>
+            </div>
+            <table class="logs">
+                <hr/>
+                <tr>
+                    <td><span class"logtitle">website</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="text" name="website" value="{{ login_info.website }}"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_website }}</span></td>
+                </tr><tr>
+                    <td><span class"logtitle">birthday</span></td>
+                </tr><tr>
+                    {% if login_info.birthday.year and login_info.birthday.month and login_info.birthday.day %}
+                        <td><input class="logfields" type="text" name="birthday" value="{{ login_info.birthday|date:"Y-m-d" }}"></td>
+                    {% else %}
+                        <td><input class="logfields" type="text" name="birthday" placeholder="yyyy-mm-dd"}}></td>
+                    {% endif %}
+                </tr><tr>
+                    <td><span class="no-to-visual">(yyyy-mm-dd)<br/>only age will be displayed in your profile</span></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_birthday }}</span></td>
+                </tr><tr>
+                    <td><span class="logtitle">location</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="text" name="location" value="{{ login_info.location }}"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_location }}</span></td>
+                </tr><tr>
+                    <td><input class="post-button" type="submit" value="Change" name="edit"></td>
+                </tr>
+            </table>
+            <br/>
+            <div class="signup-text">
+                <span class="signup-title">Account Recovery Email</span>
+            </div>
+            <table class="logs">
+                <hr/>
+                <tr>
+                    <td><span class"logtitle">email</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="text" name="email" value="{{ login_info.login.email }}"></td>
+                </tr><tr>
+                    <td><span class="no-to-visual">only used for password recovery</span></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_mail }}</span></td>
+                </tr><tr>
+                    <td><input class="post-button" type="submit" value="Save" name="edit_mail"></td>
+                </tr>
+            </table>
+
+            <br/>
+            <div class="signup-text">
+                <span class="signup-title">Password Settings</span>
+            </div>
+            <table class="logs">
+                <hr/>
+                <tr>
+                    <td class="logtitle"><span>current password</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="password" name="current_pw"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_current_pw}}</span></td>
+                </tr><tr>
+                    <td class="logtitle"><span>new password</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="password"  name="new_pw"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_pw }}</span></td>
+                </tr><tr>
+                    <td class="logtitle"><span>confirm password</span></td>
+                </tr><tr>
+                    <td><input class="logfields" type="password" name="confirm_pw"></td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ error_cornfirm_pw}}</span></td>
+                </tr><tr>
+                    <td><input class="post-button" type="submit" value="Change Password" name="edit_log"></td>
+                </tr>
+            </table>
+
+            <br/>
+            <div class="signup-text">
+                <span class="signup-title">Remove Account</span>
+            </div>
+            <table class="logs">
+                <hr/>
+                <tr>
+                    <td class="logtitle"><span>do you really want to delete the account?</span></td>
+                </tr><tr>
+                    <td><input id="delete-account" class="post-button" name="{{login_info.login.id}}"  value="Delete Account"></td>
+                    <!-- type="submit" name="delete" -->
+                </tr><tr>
+                    <td><span class="no-to-visual">once deleted you can <b>NOT</b> recover it</span></td>
+                </tr>
+            </table>
+            <hr/>
+            <a class="main-link" href="{% url 'lg_info' login_info.login.id %}">cancel</a>
+        </div>
+
+    {% csrf_token %}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% if conventions.count > 0 %}
+    {% for convention in conventions %}
+        <li>
+            <a href="{% url 'cv_perma' convention.object.id %}">
+                {{ convention.object.title }}</a>
+            <a> {{ convention.object.tag.name }}</a>
+            <ul>
+                {{ convention.object.declaration}}
+            </ul>
+        </li>
+
+    {% endfor %}
+{% else %}
+{% endif %}

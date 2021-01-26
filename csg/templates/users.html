@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} · Community{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Coding Style Guide is made from developers to developers! Find the members and their rankings of the community" >
+		<meta name="keywords" content="CodingStyleGuide, users, community, gamification, rankings">
+{% endblock %}
+
+{% block content %}
+
+<div class="sort-nav-std">
+    <div class="tag-nav-menu">
+        <span class="site-title">Community Rankings</span>
+        <div class="tag-nav-content">
+            {% for tab,sort_key in tabs %}
+                {% if sort_key == sort %}
+                    <div class="tag-nav-button tag-nav-select">
+                {% else %}
+                    <div class="tag-nav-button">
+                {% endif %}
+                        <a href="{% url 'users' %}?sort={{sort_key}}&amp;page=1" class="main-link">{{tab}}</a>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="std-wrapper user-wrapper">
+    {% for user,reputation,logininfo in users %}
+    <div class="profile-card">
+        <div class="profile-wrapper
+            {% if reputation < 10 %}
+                rookie 
+            {% elif reputation < 40 %}
+                novice
+            {% elif reputation < 100 %}
+                competent
+            {% elif reputation < 400 %}
+                skilled
+            {% elif reputation < 800 %}
+                advanced
+            {% elif reputation < 1000 %}
+                expert
+            {% else %}
+                master
+            {% endif %}
+        ">
+            <div class="reputation-user">
+                <a class="main-link reputation-username" href="{% url 'lg_info' user.id %}">
+                    {{user.username|truncatechars:16}}
+                </a>
+            </div>
+            <div class="reputation-user"><span class="vote-std-count">{{ reputation }} </span></div>
+            <div class="reputation-user"><h2 class="vote-std-title">reputation</h2></div>
+            <div class="profile-card-bottom">{{ logininfo.location }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="sort-nav-std">
+    <div class="pagination">
+        <span class="step-links">
+            {% if pagin.has_previous %}
+                <a class="main-link" href="?sort={{sort}}&amp;page={{ pagin.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="date">
+                Page {{ pagin.number }} of {{ pagin.paginator.num_pages }}
+            </span>
+
+            {% if pagin.has_next %}
+                <a class="main-link" href="?sort={{sort}}&amp;page={{ pagin.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}

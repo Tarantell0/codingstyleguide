@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %} {{ block.super }} · Sign up{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Enhance your coding: conventions, rules, techniques," >
+		<meta name="keywords" content="Enhance, coding, conventions, rules, techniques, signup, up, be, member, team, codingstyleguide">
+{% endblock %}
+
+{% block nav-title %}Create an Account{% endblock %}
+
+{% block content %}
+
+<div class="sort-nav-std">
+<div id="signup-mark">
+    <div class="signup-text">
+        <span class="signup-title">Sign up with one click</span>
+        <span>(We won't spam or share anything without your permission)</span>
+    </div>
+    <div class="social-auth-menu">
+        <!-- log-auth not in css -->
+        <div class="log-auth log-github">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "github" %}">
+                <img src="{% static "images/github.png" %}" alt="Login with your Github account">
+                </a>
+            </div>
+        </div>
+        <div class="log-auth log-twitter">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "twitter" %}">
+                <img src="{% static "images/twitter.png" %}" alt="Login with your Twitter account">
+                </a>
+            </div>
+        </div>
+        <div class="log-auth log-facebook">
+            <div class="auth-logo">
+                <a href="{% url 'social:begin' "facebook" %}">
+                <img id="facebook-logo" src="{% static "images/facebook.png" %}" alt="Login with your Facebook account">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="signup-manually">
+        <span>or</span> 
+        <a id="signup-link-form">create a new account</a>
+    </div>
+    
+    <!-- signup-error-message not in css -->
+    <input id="signup-error-message" type="hidden" value="{{have_error}}">
+
+    <div id="signup-form">
+        <hr/>
+        <form method="post">
+            <table class="logs">
+                <tr>
+                    <td><span class="logtitle">username</span></td>
+                </tr><tr>
+                    <td>
+                        {{ form.username }}
+                    </td>
+                </tr><tr>
+                    <td><span id="signup-error-message" class="errormessage">{{error_username}} {{form.username.errors.as_text|cut:"* "}} </span></td>
+                </tr><tr>
+                    <td><span class="logtitle">account recovery email <i>(optional)</i></span></td>
+                </tr><tr>
+                    <td>
+                        {{ form.email }}
+                    </td>
+                </tr><tr>
+                    <td><span class="no-to-visual">we only send email upon your request</span></td>
+                </tr><tr>
+                    <td><span class="errormessage"> {{form.email.errors.as_text|cut:"* "}} </span></td>
+                </tr><tr>
+                    <td><span class="logtitle">password</span></td>
+                </tr><tr>
+                    <td>
+                        {{ form.password }}
+                    </td>
+                </tr><tr>
+                    <td>
+                        <span class="errormessage"> {{error_password}} {{ form.password.errors.as_text|cut:"* " }} </span>
+                    </td>
+                </tr><tr>
+                    <td><span class="logtitle">verify password</span></td>
+                </tr><tr>
+                    <td>
+                        {{ form.password_verify }}
+                    </td>
+                </tr><tr>
+                    <td><span class="errormessage">{{error_password_verify}} {{ form.password_verify.errors.as_text|cut:"* " }}</span></td>
+                </tr><tr>
+                    <td><span class="logtitle">type the letters for this</span></td>
+                </tr><tr>
+                    <td id="captcha-box">
+                        {{ form.captcha }}
+                    </td>
+                </tr><tr>
+                    <td><span class="errormessage">{{ form.captcha.errors.as_text|cut:"* " }}</span></td>
+                </tr><tr>
+                    <td>
+                        <input class="post-button postcomment-button" type="submit" value="Get Started">
+                    </td>
+                </tr>
+            </table>
+            {% csrf_token %}  
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
+

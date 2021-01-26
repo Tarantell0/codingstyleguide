@@ -1,0 +1,23 @@
+{% load conventions_tags %}
+
+<div class="bottom-autor-container">
+    <div class="bottomleft-convention">
+        <a class="main-link tag-link" href="{% url 'cv_tagged' convention.tag.id %}">
+            {{convention.tag.name}}
+        </a>
+        {% edited_convention convention %}
+    </div>
+
+    <div class="bottomright-convention">
+        <span class="date">{{ convention.creation_date|timesince }} ago</span>
+        {% if convention.login.is_active %}
+            <a class="main-link" href="{% url 'lg_info' convention.login.id %}">
+                {{ convention.login.username }} {{ reputation }}
+            </a>
+        {% else %}
+        <span>
+            {{ convention.login.inactive_username }}
+        </span>
+        {% endif %}
+    </div>
+</div>

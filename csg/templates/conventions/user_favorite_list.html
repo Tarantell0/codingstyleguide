@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown_deux_tags %}
+{% load conventions_tags %}
+
+{% block title %}{{ block.super }} · Your favorites{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="You can tag your guidelines as favorite to get a better sorted list of them" >
+		<meta name="keywords" content="sort, favorites, guidelines, style, rules, techniques, codingstyleguide, list, better, fav">
+{% endblock %}
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">Your Favorites</span>
+    <hr/>
+</div>
+{% if conventions|length == 0 %}
+<div class="sort-nav-std">
+    <span class="date">You don't have any favorites selected yet.</span>
+</div>
+{% else %}
+<div class="std-wrapper">
+{% for favorite,reputation,votes in conventions %}
+    <div class="standards">
+        <div class="column-standard left-standard">
+            <div class="vote-std">
+                <h2 class="vote-std-count">{{ votes }}</h2>
+                <h2 class="vote-std-title">votes</h2>
+            </div>
+        </div>
+        <div class="column-standard right-standard">
+            <div class="standard-middle">
+                <div class="std-title">
+                     <a class="title-link" href="{% url 'cv_perma' favorite.convention.id %}">
+                        {{ favorite.convention.title|truncatechars:78 }}
+                    </a>
+                </div>
+                <div class="content-description show-description">
+                    {{ favorite.convention.description|truncatechars:160|markdown|striptags }}
+                </div>
+            </div>
+
+            <div class="standard-bottom">
+                <div class="std-bottom-wrapper">
+                    <div class="std-bottom-left">
+                        <a class="main-link lang-link" href="{% url 'cv_tagged' favorite.convention.tag.id %}">
+                            {{favorite.convention.tag.name}}
+                        </a>
+                    </div>
+                    <div class="std-bottom-right">
+                        <span class="date">{{ favorite.convention.creation_date|timesince }} ago</span>
+                            {% if favorite.convention.login.is_active %}
+                                <a class="main-link" href="{% url 'lg_info' favorite.convention.login.id %}">
+                                    {{ favorite.convention.login.username }} ({{ reputation }})
+                                </a>
+                            {% else %}
+                                <span class="inactive-user">
+                                    community
+                                <span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+<div class="sort-nav-std">
+    <div class="pagination">
+        <span class="step-links">
+            {% if pagin.has_previous %}
+                <a class="main-link" href="?sort={{sort}}&page={{ pagin.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="date">
+                Page {{ pagin.number }} of {{ pagin.paginator.num_pages }}
+            </span>
+
+            {% if pagin.has_next %}
+                <a class="main-link" href="?sort={{sort}}&page={{ pagin.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

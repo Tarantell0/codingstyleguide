@@ -1,0 +1,17 @@
+<div class="left-content-title">
+    <span>Programming Languages</span>
+</div>
+<div class="lang-list">
+		<ul style="padding:0;padding-left: 10px;"> 
+    {% for tag in tags %}
+        {% if tag.convention_set.count > 0 %}
+					<li style="list-style-type: none; padding-left: 10px;border-left: 2px solid #ddd;">
+							<a href="{% url 'cv_tagged' tag.id %}" class="main-link lang-list-link">{{ tag.name }}</a>
+							<span class="convention-times"> x {{ tag.convention_set.count }} </span>
+					</li>
+        {% endif %}
+    {% endfor %}
+		</ul>
+</div>
+
+

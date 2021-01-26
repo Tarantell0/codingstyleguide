@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load notifications_tags %}
+{% load markdown_deux_tags %}
+
+{% block title %}{{ block.super }} · Your notifications{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Your most recent notifications" >
+		<meta name="keywords" content="CodingStyleGuide, notifications, alerts, changes, profile, recent">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std">
+    <span class="site-title">Your Most Recent Notifications</span><hr/>
+</div>
+
+{% if notifications.count <= 0 %}
+<div class="sort-nav-std">
+    <span class="date">You don't have any notifications yet.</span>
+</div>
+{% else %}
+
+<div class="std-wrapper">
+{% for notification in notifications %}
+    <div class="standards">
+        <div class="column-standard left-notification-standard
+            {% if notification.is_vote_up %}
+            make-vote-up">
+            <div class="vote-std">
+                <h2 class="vote-std-count">+{{up_pts}}</h2>
+                <h2 class="vote-std-title">reputation points</h2>
+            {% endif %}
+            
+            {% if notification.is_remove_up %}
+            make-remove-up">
+            <div class="vote-std">
+                <h2 class="vote-std-count">+{{up_pts}}</h2>
+                <h2 class="vote-std-title">points removed</h2>
+            {% endif %}
+
+            {% if notification.is_vote_down %}
+            make-vote-down">
+            <div class="vote-std">
+                <h2 class="vote-std-count">{{down_pts}}</h2>
+                <h2 class="vote-std-title">reputation points</h2>
+            {% endif %}
+            
+            {% if notification.is_remove_down %}
+            make-remove-down">
+            <div class="vote-std">
+                <h2 class="vote-std-count">{{down_pts}}</h2>
+                <h2 class="vote-std-title">points removed</h2>
+            {% endif %}
+
+            {% if notification.is_comment %}
+            make-comment">
+            <div class="vote-std">
+                <h2 class="vote-std-count">+1</h2>
+                <h2 class="vote-std-count" style="font-size:11px;">comment</h2>
+            {% endif %}
+            
+            {% if notification.is_edit %}
+            make-edit">
+            <div class="vote-std">
+                <h2 class="vote-std-count">+1</h2>
+                <h2 class="vote-std-count" style="font-size:11px;">change</h2>
+            {% endif %}
+            </div>
+        </div>
+        <div class="column-standard right-standard
+           {% if not notification.is_seen %} 
+                new-notification"
+           {% endif %}
+            ">
+            <div class="standard-middle">
+                <div class="std-title">
+                     <a class="title-link" 
+                     {% if notification.convention %}
+                     href="{% url 'cv_perma' notification.convention.id %}">
+                        {{ notification.convention.title|truncatechars:80 }}</a>
+                     {% elif not notification.convention and not notification.is_other %}
+                     href="{% url 'welcome' %}">
+                        Welcome to Coding Style Guide!</a>
+                     {% elif notification.is_other %}
+                     href="{{ notification.url_for_other }}">
+                        {{ notification.header_for_other}}
+                     </a>
+                     <div class="std-bottom-right">
+                         <span class="date">{{ notification.creation_date|date:"M j 'y, H:i" }}</span>
+                     </div>
+
+                     {% endif %}
+
+                     
+                </div>
+                {% if notification.extra_info %}
+                <div class="content-description show-description">
+                     <span>{{ notification.extra_info|truncatechars:100|markdown|striptags }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% if notification.convention %}
+            <div class="standard-bottom">
+                <div class="std-bottom-wrapper">
+                    <div class="std-bottom-left">
+                        <a class="main-link lang-link" href="{% url 'cv_tagged' notification.convention.tag.id %}">
+                            {{notification.convention.tag.name}}
+                        </a>
+                    </div>
+                    <div class="std-bottom-right">
+                        <span class="date">{{ notification.creation_date|date:"M j 'y, H:i" }}</span>
+                        {% if notification.is_comment or notification.is_edit %}
+                        <span class="date"> by </span>
+                            {% if notification.supporter.is_active %}
+                                <a class="main-link" href="{% url 'lg_info' notification.supporter.id %}">
+                                    {{ notification.supporter }}
+                                </a>
+                            {% else %}
+                                <span class="inactive-user">
+                                    community
+                                <span>
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% update_as_seen notification%}
+{% endfor %}
+</div>
+
+<div class="sort-nav-std">
+    <div class="pagination">
+        <span class="step-links">
+            {% if notifications.has_previous %}
+                <a class="main-link" href="?page={{ notifications.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="date">
+                Page {{ notifications.number }} of {{ notifications.paginator.num_pages }}
+            </span>
+
+            {% if notifications.has_next %}
+                <a class="main-link" href="?page={{ notifications.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

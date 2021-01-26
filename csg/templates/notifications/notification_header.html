@@ -1,0 +1,10 @@
+<div id="notification-base" value="{{user_id}}" title="New notifications: {{notifications.count}}">
+    <div class="notification-wrapper">
+        {% if notifications.count <= 0 %}
+            <div id="notification-alert" class="notification-circle">
+        {% else %}
+            <div class="notification-circle notification-on">
+        {% endif %}
+            </div>
+    </div>
+</div>

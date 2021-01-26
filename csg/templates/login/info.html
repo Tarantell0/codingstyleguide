@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} · {{ user_info.login.username }}{% endblock %}
+
+{% block meta_seo %} 
+		<meta name="description" content="User {{ user_info.login.username }} reputation {{reputation}} member since {{ user_info.login.date_joined|date:"M Y"|lower }} {{ user_info.location }}" >
+		<meta name="keywords" content="CodingStyleGuide, member, community, user, reputation {{ user_info.login.username }}, team, {{ user_info.location }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="sort-nav-std user-site">
+    <div class="user-board">
+        <div class="board-title">
+            <span class="user-info-title">{{ user_info.login.username }}</span>
+        </div>
+        <div class="board-info">
+            <div class="user-card 
+            {% if reputation < 10 %}
+                rookie 
+            {% elif reputation < 40 %}
+                novice
+            {% elif reputation < 100 %}
+                competent
+            {% elif reputation < 400 %}
+                skilled
+            {% elif reputation < 800 %}
+                advanced
+            {% elif reputation < 1000 %}
+                expert
+            {% else %}
+                master
+            {% endif %}
+            " style="margin-left: -2px !important;" >
+                <div class="user-pts">
+                     <span class="user-info-title">{{reputation}}</span>
+                     <span>reputation</span>
+                </div>
+                <div class="user-personal-info">
+                    {% if user_info.website %}
+                        <a class="main-link" href="{{ user_info.website }}" target="_blank">{{ user_info.website }}</a>
+                    {% endif %}
+                    {% if user_info.location %}
+                        <span class="user-att">{{ user_info.location }}</span>
+                    {% endif %}
+                    {% if user_info.age %}
+                        {% if is_same_user %}
+                            <span class="user-att">birthday {{ user_info.birthday }}</span>
+                        {% endif %}
+                        <span class="user-att">{{ user_info.age }} years old</span>
+                    {% endif %}
+                    <span class="user-att">member since {{ user_info.login.date_joined|date:"M Y"|lower }}</span>
+                    
+                    {% if is_same_user %}
+                    <div class="user-edit-info">
+                        <a class="main-link some-link" href="{% url 'lg_edit' user_info.login.id %}">edit</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    
+    {% if is_same_user %}
+        <div class="powers-info">
+            <h2>Your Powers</h2>
+            <span>{{ abilities }}</span>
+            <span>{{ miss_powers }}</span>
+        </div>
+    {% endif %}
+   
+    <div class="user-track">
+        <div class="track-conventions">
+             <p><b>Guidelines</b></p>
+             <div class="user-guidelines">
+                 {% if conventions|length == 0 %}
+                     <span class="date">No entries yet.</span>
+                 {% endif %}
+                 <ul class="user-info-list">
+                 {% for convention,total_votes in conventions %}
+                     <li>
+                         <a class="main-link" href="{% url 'cv_perma' convention.id %}">{{ convention.title|truncatechars:40 }}<span>,</span></a>
+                         <a class="main-link" href="{% url 'cv_tagged' convention.tag.id %}"> {{ convention.tag.name }} </a>
+                         <span class="user-att user-info-votes"> {{ total_votes }} votes</span>
+                     </li>
+                 {% endfor %}
+                 </ul>
+             </div>
+        </div>
+        <div class="track-favs">
+             <p><b>Favorites</b></p>
+             <div class="user-favorites">
+                {% if favorites|length == 0 %}
+                    <span class="date">No favorites selected yet.</span>
+                {% endif %}
+                <ul class="user-info-list">
+                {% for favorite, total_fav_votes in favorites%}
+                    <li>
+                        <a class="main-link" href="{% url 'cv_perma' favorite.convention.id %}">{{ favorite.convention.title|truncatechars:40 }}<span>,</span></a>
+                        <a class="main-link" href="{% url 'cv_tagged' favorite.convention.tag.id %}"> {{ favorite.convention.tag.name }}</a>
+                        <span class="user-att user-info-votes"> {{ total_fav_votes }} votes</span>
+                    </li>
+                {% endfor %}
+                </ul>
+             </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+{% endblock %}

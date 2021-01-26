@@ -1,0 +1,25 @@
+{% load static %}
+    <div class="up-buttons">
+        <input type="hidden" name="convention_id" value="{{ convention.id }},{{reputation}}">
+        {% csrf_token %}
+    {% if vote.up %}
+        <img class="vote-up selected" src="{% static "images/up_on.png" %}" title="undo up" alt="Add one vote to this style guide"/>
+    {% else %}
+        <img class="vote-up" src="{% static "images/up_off.png" %}" title="vote up" alt="Add one vote to this style guide"/>
+    {% endif %}
+    </div>
+
+    <input type="hidden" name="total-votes" value={{ total_votes }}>
+    <div class="total-vote"><span class="vote-count">{{ total_votes }}</span></div>
+
+    <div class="down-buttons">
+        <input type="hidden" name="convention_id" value="{{ convention.id }},{{reputation}}">
+    {% if vote.down %}
+        <img class="vote-down selected"  src="{% static "images/down_on.png" %}" title="undo down" alt="Remove one vote to this style guide"/>
+    {% else %}
+        <img class="vote-down"  src="{% static "images/down_off.png" %}" title="vote down" alt="Remove one vote to this style guide"/>
+    {% endif %}
+    </div>
+<script>
+    var static_path = "{% static "images/" %}";
+</script>

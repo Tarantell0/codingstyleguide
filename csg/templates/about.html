@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markdown_deux_tags %}
+
+{% block title %}{{ block.super }} · About{% endblock %}
+{% block meta_seo %} 
+		<meta name="description" content="Every single one of us wants their work to add up to something. We provide a platform for you to continuously improve your code. The kind of code that has your fingerprints all over it." >
+		<meta name="keywords" content="CodingStyleGuide, About, coding, style, guide, code, readable, programming">
+{% endblock %}
+
+{% block content %}
+<div class="sort-nav-std" style="width:100% !important;">
+    <img class="about-img" src="{% static "images/banner-logo.png" %}" alt="CodingStyleGuide - Logo and slogan"/>
+    <div class="about-text">
+            {{ text|markdown }}
+            {{ table|escape|safe }}
+            {{ second_part|markdown }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load login_tags %}
+{% load tags_tags %}
+{% load markup %}
+{% load conventions_tags %}
+{% load static %}
+
+{% block nav-title %} Cross-Developer {% endblock %}
+
+
+{% block cross-navigation %}
+    <div id="cross-navigation-menu">
+        <form id="cross-form" method="POST" action="">
+        <div class="topbar-content">
+            <div id="cross-navigation-left">
+                <select id="left-cross-select" name="left-cross-group">
+                    {% for tag in tags %}
+                        {% if tag == left_tag %}
+                            <option value="{{ left_tag.id }}" selected>{{ left_tag }} </option>
+                        {% else %}
+                            <option value="{{ tag.id }}">{{ tag }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <img class="cross-arrow" src="{% static "assets/images/cross-arrow.png" %}" />
+
+
+            <img class="cross-arrow cross-arrow-right" src="{% static "assets/images/cross-arrow.png" %}" />
+            <div id="cross-navigation-right">
+
+                <select id="right-cross-select" name="right-cross-group" dir="rtl">
+                    {% for tag in tags %}
+                        {% if tag == right_tag %}
+                            <option value="{{ right_tag.id }}" selected>{{ right_tag }}</option>
+                        {% else %}
+                            <option value="{{ tag.id }}">{{ tag }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <input id="left-cross-input" value="0" name="left_new_tag" type="hidden">
+            <input id="right-cross-input" value="0" name="right_new_tag" type="hidden">
+           {% csrf_token %}
+        </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+
+    <div id="cross-content">
+        <div id="cross-code">
+            <div id="left-cross">
+            {% for convention,votes in left_convs %}
+                <div class="container-cross-convention">
+                    <div class="top-convention">
+                        <div class="cross-title">
+                            <span class="cross-votes">{{ votes }}v</span>
+                            <a class="title-link" href="{% url 'cv_perma' convention.id %}">
+                            {{ convention.title }}
+                            </a> 
+                        </div>
+                    </div>
+                    <div class="cross-duplos">
+                    {% same_conventions convention %}
+                    </div>
+                    {% if convention.declaration %}
+                    <div class="content-cross-convention">
+                        {{ convention.declaration|mkd2 }}
+                    </div>
+                    {% else %}
+                    <div class="content-cross-convention content-cross-description">
+                         {{ convention.description|mkd2 }}
+                    </div>
+                    {% endif %}
+
+                    <div class="bottom-convention">
+                        <div class="bottom-autor-container">
+                            <div class="bottomleft-convention">
+                                <a class="main-link tag-link" href="{% url 'cv_tagged' convention.tag.id %}">
+                                    {{convention.tag.name}}
+                                </a>
+                            </div>
+                            <div class="bottomright-convention">
+                                <span class="date">{{ convention.creation_date|timesince }}</span>
+                                {% if convention.login.is_active %}
+                                    <a class="main-link" href="{% url 'lg_info' convention.login.id %}">
+                                        {{ convention.login.username }} {{ reputation }}
+                                    </a>
+                                {% else %}
+                                <span>
+                                    {{ convention.login.inactive_username }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             <hr/> 
+            {% endfor %}
+            </div>
+            <div id="cross-separation"></div>
+            <div id="right-cross">
+            {% for convention,votes in right_convs %}
+                <div class="container-cross-convention">
+                    <div class="top-convention">
+                        <div class="cross-title">
+                            <span class="cross-votes">{{ votes }}v</span>
+                            <a class="title-link" href="{% url 'cv_perma' convention.id %}">
+                            {{ convention.title }}
+                            </a> 
+                        </div>
+                    </div>
+                    <div class="cross-duplos">
+                    {% same_conventions convention %}
+                    </div>
+                    {% if convention.declaration %}
+                    <div class="content-cross-convention">
+                        {{ convention.declaration|mkd2 }}
+                    </div>
+                    {% else %}
+                    <div class="content-cross-convention content-cross-description">
+                         {{ convention.description|mkd2 }}
+                    </div>
+                    {% endif %}
+
+                    <div class="bottom-convention">
+                        <div class="bottom-autor-container">
+                            <div class="bottomleft-convention">
+                                <a class="main-link tag-link" href="{% url 'cv_tagged' convention.tag.id %}">
+                                    {{convention.tag.name}}
+                                </a>
+                            </div>
+                            <div class="bottomright-convention">
+                                <span class="date">{{ convention.creation_date|timesince }}</span>
+                                {% if convention.login.is_active %}
+                                    <a class="main-link" href="{% url 'lg_info' convention.login.id %}">
+                                        {{ convention.login.username }} {{ reputation }}
+                                    </a>
+                                {% else %}
+                                <span>
+                                    {{ convention.login.inactive_username }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             <hr/>             
+             {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
